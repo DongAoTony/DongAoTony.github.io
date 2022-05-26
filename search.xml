@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title></title>
+    <url>/2022/05/22/%E5%8D%9A%E4%B8%BB%E5%AF%84%E8%AF%AD/</url>
+    <content><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>智能合约由于其去中心化的基本属性，以及自动执行的强制特性，让人们交流更加具有公信力，让世界间人为制造的壁垒逐渐被打破，让大家的生活变得更加方便。因此它的数量正在以指数级增长。</p>
+<p>但是，随着智能合约数量的增加，单个合约的体量与内在复杂度，也在急剧增加；同时，伴随着智能合约金融属性，让不良分子也盯上这块大的蛋糕；合约的设计或实现不合理，一旦被这些不法分子利用或用户的误操作，就会让我们遭受巨大损失。The DAO项目的辉煌与失败，就是很经典的例子。</p>
+<p>我们试图从网上寻找、也与行业精英聊过，发现关于智能合约安全与防护的相关知识存在着匮乏、零碎、不成体系等问题，远远难以满足当下智能合约安全保障的需求。因此，与几位共识的同仁商量，决定在Github上开辟一块专有的智能合约安全相关知识的学习园地。</p>
+<h1 id="欢迎您"><a href="#欢迎您" class="headerlink" title="欢迎您"></a>欢迎您</h1><p>我们将一直秉承该园地上的知识公开、免费，以提供给感兴趣的同仁一道学习。</p>
+<p>当然，我们也知道，这是一项不小的工作。所以期待更多的有共识的同仁一起加入！</p>
+<p>我们也有志基于此专题的学习，打造一个去中心的运作模式，对于有一定贡献量的作者，将视作核心团队成员。</p>
+<p>期待像我们一样的草莽，借此次去中心化的技术革命浪潮，打破人类已存在的诸多封闭性，成就别人，也成就你我！ 本专栏的知识产权，将归核心团队共同所有！</p>
+]]></content>
+  </entry>
+  <entry>
     <title>K框架第一步：环境搭建</title>
     <url>/2022/05/26/BasicProgramminginK-1/</url>
     <content><![CDATA[<h1 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h1><ol>
@@ -117,15 +129,147 @@ krun tests/diverse/factorial.simple
       </categories>
   </entry>
   <entry>
-    <title></title>
-    <url>/2022/05/22/%E5%8D%9A%E4%B8%BB%E5%AF%84%E8%AF%AD/</url>
-    <content><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>智能合约由于其去中心化的基本属性，以及自动执行的强制特性，让人们交流更加具有公信力，让世界间人为制造的壁垒逐渐被打破，让大家的生活变得更加方便。因此它的数量正在以指数级增长。</p>
-<p>但是，随着智能合约数量的增加，单个合约的体量与内在复杂度，也在急剧增加；同时，伴随着智能合约金融属性，让不良分子也盯上这块大的蛋糕；合约的设计或实现不合理，一旦被这些不法分子利用或用户的误操作，就会让我们遭受巨大损失。The DAO项目的辉煌与失败，就是很经典的例子。</p>
-<p>我们试图从网上寻找、也与行业精英聊过，发现关于智能合约安全与防护的相关知识存在着匮乏、零碎、不成体系等问题，远远难以满足当下智能合约安全保障的需求。因此，与几位共识的同仁商量，决定在Github上开辟一块专有的智能合约安全相关知识的学习园地。</p>
-<h1 id="欢迎您"><a href="#欢迎您" class="headerlink" title="欢迎您"></a>欢迎您</h1><p>我们将一直秉承该园地上的知识公开、免费，以提供给感兴趣的同仁一道学习。</p>
-<p>当然，我们也知道，这是一项不小的工作。所以期待更多的有共识的同仁一起加入！</p>
-<p>我们也有志基于此专题的学习，打造一个去中心的运作模式，对于有一定贡献量的作者，将视作核心团队成员。</p>
-<p>期待像我们一样的草莽，借此次去中心化的技术革命浪潮，打破人类已存在的诸多封闭性，成就别人，也成就你我！ 本专栏的知识产权，将归核心团队共同所有！</p>
+    <title>K框架第二步：K框架基础</title>
+    <url>/2022/05/26/BasicProgramminginK-2/</url>
+    <content><![CDATA[<p>这堂课将主要讲解K语言中的关于生产（productions）和规则的基础知识。</p>
+<ol>
+<li>生产和规则是K语言中两种语句类型。</li>
+<li>一个K文件由一个或多个requires或模块组成。</li>
+<li>一个模块又由一个或多个imports或语句组成。</li>
+</ol>
+<p>这堂课先不会过多解释requires，模块（modules），和语句（sentences）等的概念；只要先把模块当作语句的一个容器就好，在下面的学习中，还不用太纠结requires或imports是什么，有什么区别与 联系等。</p>
+<h1 id="第1个K程序"><a href="#第1个K程序" class="headerlink" title="第1个K程序"></a>第1个K程序</h1><p>在notepad++中创建文件：<code>lesson-02-a.k</code>，这个文件的内容如下：</p>
+<pre><code class="k">module LESSON-02-A
+
+  syntax Color ::= Yellow() | Blue()
+  syntax Fruit ::= Banana() | Blueberry()
+  syntax Color ::= colorOf(Fruit) [function]
+
+  rule colorOf(Banana()) =&gt; Yellow()
+  rule colorOf(Blueberry()) =&gt; Blue()
+
+endmodule
+</code></pre>
+<p>执行下面命令来编译这个文件</p>
+<pre><code>kompile lesson-02-a.k
+</code></pre>
+<p>其中kompile是K的编译器。上面的命令，会得到一个解释器（interpreter ）。</p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651494937911.png" alt="1651494937911"></p>
+<ol>
+<li>从上图，可以看到，编译创建目录 <code>lesson-02-a-kompiled</code>来存放编译的结果。</li>
+<li>虽然这个例子里只有一个K文件，在实际项目中可能会多个K文件，它们编译后会合成一个K定义（K definition）；具体什么是K定义，我们后面会讲。</li>
+</ol>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651495425445.png" alt="1651495425445"></p>
+<ol start="3">
+<li>在这个编译产生的目录里，包含基于定义来执行程序，或完成证明的所有东西。</li>
+</ol>
+<p>下面我们在文件<code>lesson-02-a.k</code>所在的目录下，创建文件<code>banana.color</code>,并在该文件中输入以下内容：</p>
+<pre><code>colorOf(Banana())
+</code></pre>
+<p>然后，可以通过执行以下的命令，来评估这条短语：</p>
+<pre><code>krun banana.color
+</code></pre>
+<p>该命令输出如下：</p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651495912695.png" alt="1651495912695"></p>
+<p>上述krun命令其实会调用kompile编译产生的解释器，来执行banana.color中的短语指令。</p>
+<p>你也可以直接用命令行的方式，来指定要执行的指令：</p>
+<pre><code class="shell">krun -cPGM=&#39;colorOf(Banana())&#39;
+</code></pre>
+<p>可以看到，它与指令在文件中情形，输出是一样的：</p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651496233213.png" alt="1651496233213"></p>
+<h1 id="生产（Productions）、构造器与函数"><a href="#生产（Productions）、构造器与函数" class="headerlink" title="生产（Productions）、构造器与函数"></a>生产（Productions）、构造器与函数</h1><p>下面我们就来看一个程序的源码：</p>
+<pre><code>module LESSON-02-B
+
+  syntax Color ::= Yellow()
+  syntax Color ::= Blue()
+  syntax Fruit ::= Banana()
+  syntax Fruit ::= Blueberry()
+  syntax Color ::= colorOf(Fruit) [function]
+
+  rule colorOf(Banana()) =&gt; Yellow()
+  rule colorOf(Blueberry()) =&gt; Blue()
+
+endmodule
+</code></pre>
+<p>首先，我们看到该K定义里包含了5个生产：</p>
+<ul>
+<li>生产是以关键词<strong>syntax</strong>开始；</li>
+<li>接着是一个sort(分类词)，如源码中的Color，Fruit，它们的首字母要大写；</li>
+<li>再后而是操作符<code>::=</code>；</li>
+<li>后面则是一个定义，或更多的生产(productions)；生产之间，用操作符<code>|</code>隔开；</li>
+<li>生产有多种类型，但在上面的源码中，只牵涉到了两种：<ul>
+<li>构造器（constructors）；</li>
+<li>函数（functions）。</li>
+</ul>
+</li>
+<li>操作符<code>|</code>用于具有同样分类（sort）的生产，所以上面的源，基于操作符<code>|</code>，可等效改造如下：</li>
+</ul>
+<pre><code>module LESSON-02-C
+
+  syntax Color ::= Yellow()
+                 | Blue()
+                 | colorOf(Fruit) [function]
+  syntax Fruit ::= Banana()
+                 | Blueberry()
+
+  rule colorOf(Banana()) =&gt; Yellow()
+  rule colorOf(Blueberry()) =&gt; Blue()
+
+endmodule
+</code></pre>
+<ul>
+<li>所有生产类型都有相似的语法，但上下文（context)和属性(attributes)会有所不同；后面会逐步讲解它们的不同。这里就来看例子中牵涉到知识点：<ul>
+<li>构造器，像例子的Yellow()<code>, </code>Blue()<code>, </code>Banana()<code>, 以及 </code>Blueberry()就都是构造器，它就像是函数式编程语言中的构造函数，用来构造一个代数数据类型；而这个数据类型，就是操作符<code>::=</code>前面的分类词（sort）所指定；与构造函数一样，该构造器是可以有参数的。</li>
+<li>函数，它在后面带有<strong>function</strong>属性标识它的生产类型；属性都放在生产语句的末尾，由中括号<code>[]</code>括起来；如果有多个属性，则用逗号<code>,</code>区分开来；规则（rules）的属性也是这样设计的。</li>
+</ul>
+</li>
+</ul>
+<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><p>前面，我们已经试了<code>babana()</code>，有兴趣的同学，可以再用<code>Blueberry()</code>这个生产定义，来检验一下函数<code>colorOf</code>的返回值</p>
+<h1 id="规则、匹配与变量"><a href="#规则、匹配与变量" class="headerlink" title="规则、匹配与变量"></a>规则、匹配与变量</h1><ol>
+<li>一条规则(rule)是由<code>rule</code>关键词开始。</li>
+<li>一条规则里至少包含一个<strong>重写操作符</strong>（rewrite operator）<code>=&gt;</code>。</li>
+<li>重写操作符是K语言内在的生产，后面会进一步的讲解；这里我们只要知道，该操作符让一条规则分成了左、右两部分：</li>
+</ol>
+<ul>
+<li>左边是函数的名字，以及各式的函数参数；</li>
+<li>右边是另一个样式。</li>
+</ul>
+<ol start="4">
+<li>规则的意义相对简单：检测指令解释执行时，会去匹配规则的左半部分；匹配则会输出右半部分；将前面测试的例子，就是匹配到了colorOf(Banana())，所以得到该函数的返回值<code>Yellow()</code></li>
+</ol>
+<p>到这里，我们才讲解一个概念：变量（<strong>variable</strong>）。初学者容易把它与构造器相混淆。但我们可以从以下几点，来掌握K语言中变量的特性：</p>
+<ol>
+<li>它由一个大写标识符来构成其名字；</li>
+<li>不像构造器具有唯一确定性，一个变量往往可以匹配多种样式（这些样式中包括了一个异常（exception）; 因此对于变量，只要名字相同就匹配成功（如果是构造器，则需要内容相同，才算配置成功）。</li>
+</ol>
+<p>下面是一个稍微更复杂一点的例子<code>lesson-02-d.k</code>：</p>
+<pre><code>module LESSON-02-D
+
+  syntax Container ::= Jar(Fruit)
+  syntax Fruit ::= Apple() | Pear()
+
+  syntax Fruit ::= contentsOfJar(Container) [function]
+
+  rule contentsOfJar(Jar(F)) =&gt; F
+
+endmodule
+</code></pre>
+<p>在这个例子规则中的F，就是一个变量，它将可发匹配Apple()，也可以匹配Pear()。同时也可以通过下面的命令，来检验这个例子的定义：</p>
+<pre><code class="shell">krun -cPGM=&#39;contentsOfJar(Jar(Apple()))&#39;
+</code></pre>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651500607852.png" alt="1651500607852"></p>
+<p>执行报错了，那是一个目录下有多个编译产生的K定义所致，我们把lesson-02-a-kompiled目录删除，再试：</p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651500712360.png" alt="1651500712360"></p>
+<p>可以看到这次不报错了，输出也与预期相吻合。</p>
+<p>最后，我们再补充一个小的知识点：当构造器里的参数有多个时，也是用逗号<code>,</code>隔开。</p>
+<h1 id="练习-1"><a href="#练习-1" class="headerlink" title="练习"></a>练习</h1><ol>
+<li>扩展<code>lesson-02-a.k</code>中的K定义。加入了黑莓和猕猴桃。为了简单起见，黑莓是黑色的，猕猴桃是绿色的。然后编译定义并测试’ colorOf ‘函数是否正确处理了这两个新增的水果。</li>
+<li>创建一个新的K定义，将outfit定义为由帽子、衬衫、裤子和鞋子组成的多参数构造函数。定义一个新的分类(sort)：<code>Boolean</code>，有两个构造函数:true和false。每顶帽子、衬衫、裤子和鞋子都有一个参数(一种颜色)，黑色或白色。然后定义一个<code>outfitMatching </code>函数，如果服装的所有部分都是相同的颜色，该函数将返回true（你不需要定义返回false的情况）。编写一些测试，检查一下函数的行为是否符合您的预期。</li>
+</ol>
 ]]></content>
+      <categories>
+        <category>区块链安全</category>
+        <category>K框架编程入门</category>
+      </categories>
   </entry>
 </search>

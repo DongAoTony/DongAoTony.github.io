@@ -197,6 +197,195 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/26/BasicProgramminginK-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg#/images/avatar.gif">
+      <meta itemprop="name" content="DongAoTony">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="区块链安全">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 区块链安全">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/05/26/BasicProgramminginK-1/" class="post-title-link" itemprop="url">K框架第一步：环境搭建</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-05-26 21:17:25 / 修改时间：23:03:10" itemprop="dateCreated datePublished" datetime="2022-05-26T21:17:25+08:00">2022-05-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">区块链安全</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%AE%89%E5%85%A8/Life/" itemprop="url" rel="index"><span itemprop="name">Life</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h1><ol>
+<li>K是个语义框架，所以它是用来创建一个语言体系的；</li>
+<li>K本身就是一个语言体系，基于该语言体系，我们将：<ul>
+<li>创建编程语言</li>
+<li>构建类型系统</li>
+<li>编写形式化分析工具</li>
+</ul>
+</li>
+<li>K语言能够实现以上功能是基于<strong>配置</strong>和<strong>规则</strong>：</li>
+</ol>
+<ul>
+<li>配置会基于cells来组织状态；</li>
+<li>规则则用来限定词汇的可读、可写、可读可写，或无用等属性。</li>
+</ul>
+<ol start="4">
+<li>计算机语言其实就是基于语言抽象语法，按某种句法构成的一件件计算任务，它也是现实事务的一种解释方式；这点与K语言是完全吻合的；也使得K语言特别适合计算机程序这种控制密集型语言，用另一种语言逻辑来验证：</li>
+</ol>
+<ul>
+<li>可能会突然终止；</li>
+<li>可能发生异常</li>
+<li>可能调用等</li>
+</ul>
+<h1 id="安装K框架包"><a href="#安装K框架包" class="headerlink" title="安装K框架包"></a>安装K框架包</h1><p>工欲善其事，必先利其器。让我们先来把工具安装和环境搭建好。</p>
+<h2 id="基于ubuntu辅助工具的安装"><a href="#基于ubuntu辅助工具的安装" class="headerlink" title="基于ubuntu辅助工具的安装"></a>基于ubuntu辅助工具的安装</h2><p>选定Ubuntu为K框架的执行的环境。我们所用的Ubuntu是安装在Windows 10的VM Workstation虚拟机上。下面是该Ubuntu的版本：</p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651472139839.png" alt="1651472139839"></p>
+<p>因此后面选择K框架的包，也选择与该版本相吻合的。</p>
+<p>先确认以下的包是否已经安装好：</p>
+<ol>
+<li><p>wget：该工具用来获取远程的安装包。</p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651472297060.png" alt="1651472297060"></p>
+</li>
+<li><p>git：该工具用来访问远程的git仓库。</p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651472357625.png" alt="1651472357625"></p>
+</li>
+<li><p>curl：该工具用来访问远程的服务器资源。</p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651472402482.png" alt="1651472402482"></p>
+</li>
+<li><p>由于我们之前安装了Oracle Java6，而KFramework要用的是OpenJDK11，所以这里要有JDK的多个版本共存与切换的问题要注意。</p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651472865105.png" alt="1651472865105"></p>
+<p>查看之前安装的JDK6所在的位置，记下来，因为下面的配置与切换会用到（vi &#x2F;etc&#x2F;profile）：</p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651473893594.png" alt="1651473893594"></p>
+<p>下面是安装与配置所用JDK的脚本：</p>
+<pre><code class="mkdir">sudo apt-get install openjdk-11-jdk
+
+sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-11-openjdk-amd64/bin/java 700
+sudo update-alternatives --install /usr/bin/javac javac /usr/bin/java java /usr/lib/jvm/java-11-openjdk-amd64/bin/javac 700
+sudo update-alternatives --install /usr/bin/jar jar /usr/bin/java java /usr/lib/jvm/java-11-openjdk-amd64/bin/jar 700
+
+sudo update-alternatives --config java
+</code></pre>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651478714668.png" alt="1651478714668"></p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651478869322.png" alt="1651478869322"></p>
+<p>再来查看java的版本(其实，我们在上面安装完optjdk后，Ubuntu缺省就切换到了该版本)：</p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651479138522.png" alt="1651479138522"></p>
+</li>
+<li><p>执行以下命令，安装指定的库：</p>
+</li>
+</ol>
+<pre><code class="shell">mkdir kframeworks
+git init
+git submodule update --init --recursive
+sudo apt-get install build-essential m4 openjdk-11-jdk libgmp-dev libmpfr-dev pkg-config flex bison z3 libz3-dev maven python3 cmake gcc clang-10 lld-10 llvm-10-tools zlib1g-dev libboost-test-dev libyaml-dev libjemalloc-dev
+curl -sSL https://get.haskellstack.org/ | sh
+</code></pre>
+<p>其中最后haskellstack的安装如下：</p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651483223776.png" alt="1651483223776"></p>
+<h2 id="下载K框架包"><a href="#下载K框架包" class="headerlink" title="下载K框架包"></a>下载K框架包</h2><p>由于我们只是想使用K框架，并不想更新或改造K框架本身，所以我们直接下载K框架的安装包：kframework_5.3.28_amd64_bionic.deb</p>
+<h2 id="安装K框架包-1"><a href="#安装K框架包-1" class="headerlink" title="安装K框架包"></a>安装K框架包</h2><pre><code class="shell">sudo apt install ./kframework_5.3.28_amd64_bionic.deb
+</code></pre>
+<p>安装成功后，该包会被安装在：&#x2F;usr：</p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651483443032.png" alt="1651483443032"></p>
+<h2 id="测试K框架包"><a href="#测试K框架包" class="headerlink" title="测试K框架包"></a>测试K框架包</h2><p>这里测试是验证K框架包是否安装好。</p>
+<p>测试的思路就是是从安装的K框架包里，提取K指导语言例子，然后尝试着编译和运行这些例子；如果成功，则意味着K框架包及其环境搭建好了。</p>
+<ol>
+<li>将K tutorial拷贝到某一工作目录，例如：</li>
+</ol>
+<pre><code class="shell">cp -R /usr/share/kframework/pl-tutorial $HOME/kframeworks/pl-tutorial
+</code></pre>
+<ol start="2">
+<li>然后尝试着编译并运行某个例子：</li>
+</ol>
+<pre><code class="shell">cd $HOME/kframeworks/pl-tutorial/2_languages/1_simple/1_untyped
+make kompile
+krun tests/diverse/factorial.simple
+</code></pre>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651483627630.png" alt="1651483627630"></p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651483691843.png" alt="1651483691843"></p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651483730297.png" alt="1651483730297"></p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651483819927.png" alt="1651483819927"></p>
+<p>看到上面的信息输出，那就恭喜了：K框架的环境搭建好了！</p>
+<h1 id="配置编辑器"><a href="#配置编辑器" class="headerlink" title="配置编辑器"></a>配置编辑器</h1><p>我们选择notepad++作为K语言的编辑器，所以我们就配置该编辑器，让它可以高亮显示K语言的语法。</p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651484017617.png" alt="1651484017617"></p>
+<p>我们要做的就是，下载上图所示git库中的<a target="_blank" rel="noopener" href="https://github.com/kframework/k-editor-support/blob/master/notepad%2B%2B/k_syntax_highlight_nppp.xml">k_syntax_highlight_nppp.xml</a>，并更新notepad++编辑器：</p>
+<ol>
+<li>首先是拉取相应的git库，以便拿到上述的notepad++模板</li>
+</ol>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651484780497.png" alt="1651484780497"></p>
+<ol start="2">
+<li>打开notepad++，通过下图菜单，导入K语言的模板</li>
+</ol>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651484936077.png" alt="1651484936077"></p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651484997909.png" alt="1651484997909"></p>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651485032489.png" alt="1651485032489"></p>
+<ol start="3">
+<li>重启notepad++，以检验上面导致的模板有效</li>
+</ol>
+<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651485164024.png" alt="1651485164024"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/26/BasicProgramminginK-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -388,195 +577,6 @@ endmodule
 <li>扩展<code>lesson-02-a.k</code>中的K定义。加入了黑莓和猕猴桃。为了简单起见，黑莓是黑色的，猕猴桃是绿色的。然后编译定义并测试’ colorOf ‘函数是否正确处理了这两个新增的水果。</li>
 <li>创建一个新的K定义，将outfit定义为由帽子、衬衫、裤子和鞋子组成的多参数构造函数。定义一个新的分类(sort)：<code>Boolean</code>，有两个构造函数:true和false。每顶帽子、衬衫、裤子和鞋子都有一个参数(一种颜色)，黑色或白色。然后定义一个<code>outfitMatching </code>函数，如果服装的所有部分都是相同的颜色，该函数将返回true（你不需要定义返回false的情况）。编写一些测试，检查一下函数的行为是否符合您的预期。</li>
 </ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/26/BasicProgramminginK-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg#/images/avatar.gif">
-      <meta itemprop="name" content="DongAoTony">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="区块链安全">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 区块链安全">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/05/26/BasicProgramminginK-1/" class="post-title-link" itemprop="url">K框架第一步：环境搭建</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-05-26 21:17:25 / 修改时间：23:03:10" itemprop="dateCreated datePublished" datetime="2022-05-26T21:17:25+08:00">2022-05-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">区块链安全</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%AE%89%E5%85%A8/Life/" itemprop="url" rel="index"><span itemprop="name">Life</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h1><ol>
-<li>K是个语义框架，所以它是用来创建一个语言体系的；</li>
-<li>K本身就是一个语言体系，基于该语言体系，我们将：<ul>
-<li>创建编程语言</li>
-<li>构建类型系统</li>
-<li>编写形式化分析工具</li>
-</ul>
-</li>
-<li>K语言能够实现以上功能是基于<strong>配置</strong>和<strong>规则</strong>：</li>
-</ol>
-<ul>
-<li>配置会基于cells来组织状态；</li>
-<li>规则则用来限定词汇的可读、可写、可读可写，或无用等属性。</li>
-</ul>
-<ol start="4">
-<li>计算机语言其实就是基于语言抽象语法，按某种句法构成的一件件计算任务，它也是现实事务的一种解释方式；这点与K语言是完全吻合的；也使得K语言特别适合计算机程序这种控制密集型语言，用另一种语言逻辑来验证：</li>
-</ol>
-<ul>
-<li>可能会突然终止；</li>
-<li>可能发生异常</li>
-<li>可能调用等</li>
-</ul>
-<h1 id="安装K框架包"><a href="#安装K框架包" class="headerlink" title="安装K框架包"></a>安装K框架包</h1><p>工欲善其事，必先利其器。让我们先来把工具安装和环境搭建好。</p>
-<h2 id="基于ubuntu辅助工具的安装"><a href="#基于ubuntu辅助工具的安装" class="headerlink" title="基于ubuntu辅助工具的安装"></a>基于ubuntu辅助工具的安装</h2><p>选定Ubuntu为K框架的执行的环境。我们所用的Ubuntu是安装在Windows 10的VM Workstation虚拟机上。下面是该Ubuntu的版本：</p>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651472139839.png" alt="1651472139839"></p>
-<p>因此后面选择K框架的包，也选择与该版本相吻合的。</p>
-<p>先确认以下的包是否已经安装好：</p>
-<ol>
-<li><p>wget：该工具用来获取远程的安装包。</p>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651472297060.png" alt="1651472297060"></p>
-</li>
-<li><p>git：该工具用来访问远程的git仓库。</p>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651472357625.png" alt="1651472357625"></p>
-</li>
-<li><p>curl：该工具用来访问远程的服务器资源。</p>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651472402482.png" alt="1651472402482"></p>
-</li>
-<li><p>由于我们之前安装了Oracle Java6，而KFramework要用的是OpenJDK11，所以这里要有JDK的多个版本共存与切换的问题要注意。</p>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651472865105.png" alt="1651472865105"></p>
-<p>查看之前安装的JDK6所在的位置，记下来，因为下面的配置与切换会用到（vi &#x2F;etc&#x2F;profile）：</p>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651473893594.png" alt="1651473893594"></p>
-<p>下面是安装与配置所用JDK的脚本：</p>
-<pre><code class="mkdir">sudo apt-get install openjdk-11-jdk
-
-sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-11-openjdk-amd64/bin/java 700
-sudo update-alternatives --install /usr/bin/javac javac /usr/bin/java java /usr/lib/jvm/java-11-openjdk-amd64/bin/javac 700
-sudo update-alternatives --install /usr/bin/jar jar /usr/bin/java java /usr/lib/jvm/java-11-openjdk-amd64/bin/jar 700
-
-sudo update-alternatives --config java
-</code></pre>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651478714668.png" alt="1651478714668"></p>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651478869322.png" alt="1651478869322"></p>
-<p>再来查看java的版本(其实，我们在上面安装完optjdk后，Ubuntu缺省就切换到了该版本)：</p>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651479138522.png" alt="1651479138522"></p>
-</li>
-<li><p>执行以下命令，安装指定的库：</p>
-</li>
-</ol>
-<pre><code class="shell">mkdir kframeworks
-git init
-git submodule update --init --recursive
-sudo apt-get install build-essential m4 openjdk-11-jdk libgmp-dev libmpfr-dev pkg-config flex bison z3 libz3-dev maven python3 cmake gcc clang-10 lld-10 llvm-10-tools zlib1g-dev libboost-test-dev libyaml-dev libjemalloc-dev
-curl -sSL https://get.haskellstack.org/ | sh
-</code></pre>
-<p>其中最后haskellstack的安装如下：</p>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651483223776.png" alt="1651483223776"></p>
-<h2 id="下载K框架包"><a href="#下载K框架包" class="headerlink" title="下载K框架包"></a>下载K框架包</h2><p>由于我们只是想使用K框架，并不想更新或改造K框架本身，所以我们直接下载K框架的安装包：kframework_5.3.28_amd64_bionic.deb</p>
-<h2 id="安装K框架包-1"><a href="#安装K框架包-1" class="headerlink" title="安装K框架包"></a>安装K框架包</h2><pre><code class="shell">sudo apt install ./kframework_5.3.28_amd64_bionic.deb
-</code></pre>
-<p>安装成功后，该包会被安装在：&#x2F;usr：</p>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651483443032.png" alt="1651483443032"></p>
-<h2 id="测试K框架包"><a href="#测试K框架包" class="headerlink" title="测试K框架包"></a>测试K框架包</h2><p>这里测试是验证K框架包是否安装好。</p>
-<p>测试的思路就是是从安装的K框架包里，提取K指导语言例子，然后尝试着编译和运行这些例子；如果成功，则意味着K框架包及其环境搭建好了。</p>
-<ol>
-<li>将K tutorial拷贝到某一工作目录，例如：</li>
-</ol>
-<pre><code class="shell">cp -R /usr/share/kframework/pl-tutorial $HOME/kframeworks/pl-tutorial
-</code></pre>
-<ol start="2">
-<li>然后尝试着编译并运行某个例子：</li>
-</ol>
-<pre><code class="shell">cd $HOME/kframeworks/pl-tutorial/2_languages/1_simple/1_untyped
-make kompile
-krun tests/diverse/factorial.simple
-</code></pre>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651483627630.png" alt="1651483627630"></p>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651483691843.png" alt="1651483691843"></p>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651483730297.png" alt="1651483730297"></p>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651483819927.png" alt="1651483819927"></p>
-<p>看到上面的信息输出，那就恭喜了：K框架的环境搭建好了！</p>
-<h1 id="配置编辑器"><a href="#配置编辑器" class="headerlink" title="配置编辑器"></a>配置编辑器</h1><p>我们选择notepad++作为K语言的编辑器，所以我们就配置该编辑器，让它可以高亮显示K语言的语法。</p>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651484017617.png" alt="1651484017617"></p>
-<p>我们要做的就是，下载上图所示git库中的<a target="_blank" rel="noopener" href="https://github.com/kframework/k-editor-support/blob/master/notepad%2B%2B/k_syntax_highlight_nppp.xml">k_syntax_highlight_nppp.xml</a>，并更新notepad++编辑器：</p>
-<ol>
-<li>首先是拉取相应的git库，以便拿到上述的notepad++模板</li>
-</ol>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651484780497.png" alt="1651484780497"></p>
-<ol start="2">
-<li>打开notepad++，通过下图菜单，导入K语言的模板</li>
-</ol>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651484936077.png" alt="1651484936077"></p>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651484997909.png" alt="1651484997909"></p>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651485032489.png" alt="1651485032489"></p>
-<ol start="3">
-<li>重启notepad++，以检验上面导致的模板有效</li>
-</ol>
-<p><img src="C:\Users\Admin\AppData\Roaming\Typora\typora-user-images\1651485164024.png" alt="1651485164024"></p>
 
       
     </div>

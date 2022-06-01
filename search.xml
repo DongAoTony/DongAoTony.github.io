@@ -116,6 +116,81 @@ krun tests/diverse/factorial.simple
       </categories>
   </entry>
   <entry>
+    <title>K框架第六步：什么是内建的Integers 和 Booleans</title>
+    <url>/2022/05/30/BasicProgramminginK-6/</url>
+    <content><![CDATA[<p>本节课的目的是解释K中两种最基本的，自带的sort：<code>Int</code>sort和<code>Bool</code> sort，它们分别表示<strong>arbitrary-precision integers</strong>和<strong>Boolean algebra</strong>。</p>
+<h2 id="K中自带的sorts"><a href="#K中自带的sorts" class="headerlink" title="K中自带的sorts"></a>K中自带的sorts</h2><p>K在<a href="https://kframework.org/k-distribution/include/kframework/builtin/domains/">domains.md</a>中提供了一些有用sorts的说明，可以在K安装的<code>include/kframework/builtin</code>目录中找到这个文件。这个文件是通过<a href="https://en.wikipedia.org/wiki/Literate_programming">Literate programming</a>风格定义的，我们将在以后的课程中讨论。我们不会立即覆盖所有的sort，但是，这一课讨论了一些关于整数和布尔值的细节，并提供了如何在K的文档中查找更多关于内置函数的详细知识的信息。</p>
+<h2 id="K中的Booleans"><a href="#K中的Booleans" class="headerlink" title="K中的Booleans"></a>K中的Booleans</h2><p>K提供的最基本的内置sort是<code>Bool</code> sort，代表着布尔值(即<code>true</code>和<code>false</code>)。您已经看到了我们如何能够使用K的解析和消除歧义特性中，自己创建这个类型。然而，在绝大多数情况下，我们宁愿导入由K本身定义好的Boolean algebra。最简单的是，你可以通过在你的定义中导入模块<code>BOOL</code>来实现这一点。例如(“lesson-06-a.k”):</p>
+<pre><code class="k">module LESSON-06-A
+  imports BOOL
+
+  syntax Fruit ::= Blueberry() | Banana()
+  syntax Bool ::= isBlue(Fruit) [function]
+
+  rule isBlue(Blueberry()) =&gt; true
+  rule isBlue(Banana()) =&gt; false
+endmodule
+</code></pre>
+<p>这里我们定义了一个简单的<strong>谓词（predicate）</strong>，即返回布尔值的函数。现在，我们可以对这些值执行通常的与、或、非等布尔运算。例如(“lesson-06-b.k”):“</p>
+<pre><code class="k">module LESSON-06-B
+  imports BOOL
+
+  syntax Fruit ::= Blueberry() | Banana()
+  syntax Bool ::= isBlue(Fruit) [function]
+
+  rule isBlue(Blueberry()) =&gt; true
+  rule isBlue(Banana()) =&gt; false
+
+  syntax Bool ::= isYellow(Fruit) [function]
+                | isBlueOrYellow(Fruit) [function]
+
+  rule isYellow(Banana()) =&gt; true
+  rule isYellow(Blueberry()) =&gt; false
+
+  rule isBlueOrYellow(F) =&gt; isBlue(F) orBool isYellow(F)
+endmodule
+</code></pre>
+<p>在上面的例子中，包含布尔值<strong>或</strong>是通过<code>orBool </code>函数执行的，该函数在<code>BOOL</code>模块中定义。按照惯例，在K中，内置sort上的许多函数都以这些函数定义的<strong>主sort的名称作为后缀</strong>。这样，K的syntax (通常)就不会与任何其他编程语言的语法发生冲突。</p>
+<h3 id="课程练习"><a href="#课程练习" class="headerlink" title="课程练习"></a>课程练习</h3><p>编写一个函数<code>isBlueAndNotYellow</code>来计算适当的布尔表达式。如果您不确定要使用什么syntax，可以参考<a href="https://kframework.org/k-distribution/include/kframework/builtin/domains/">domains.md</a>中的’ BOOL ‘模块。添加一个sort为“Fruit”的术语，其中“isBlue”和“isYellow”都返回true，并测试“isblueandnotyellow”函数在所有三个“Fruit”上的行为是否符合预期。</p>
+<h3 id="Syntax-Modules"><a href="#Syntax-Modules" class="headerlink" title="Syntax Modules"></a>Syntax Modules</h3><p>对于在<code>domains.md</code>的大多数sorts， K定义了不少于1个模块，可以被用户导入。例如，对于<code>Bool</code> sort，K定义了前面已经讨论过的<code>BOOL</code> 模块，但也提供了<code>BOOL-SYNTAX</code>模块。与<code>BOOL</code>模块不同，该模块只声明值<code>true</code>和<code>false</code>，而不声明任何操作<code>Bool</code> sort的函数。基本原理是，在某些情况下，您可能希望将此模块导入到您定义的主syntax模块中，而您通常不希望对包含所有<code>Bool</code> sort函数的模块版本进行此操作。举个例子,如果你是定义的语义c++,你可能会<code>BOOL-SYNTAX</code> 导入的语法模块定义,因为<code>true</code>和<code>false</code>是c++的语法的一部分；但只会主要semantics模块中调用<code>BOOL</code>模块类似的函数，因为c++定义了它自己关于与、或、非运算的语法,它与<code>BOOL</code>模块中定义的语法不同。</p>
+<p>例如，下面是如何重新定义布尔表达式计算器，它使用了“Bool”sort，同时维护模块和导入的惯用结构，并首次包含自主定制<strong>计算表达式值</strong>的规则(‘ lesson-06-c.k ‘):</p>
+<pre><code class="k">module LESSON-06-C-SYNTAX
+  imports BOOL-SYNTAX
+
+  syntax Bool ::= &quot;(&quot; Bool &quot;)&quot; [bracket]
+                &gt; &quot;!&quot; Bool [function]
+                &gt; left:
+                  Bool &quot;&amp;&amp;&quot; Bool [function]
+                | Bool &quot;^&quot; Bool [function]
+                | Bool &quot;||&quot; Bool [function]
+endmodule
+
+module LESSON-06-C
+  imports LESSON-06-C-SYNTAX
+  imports BOOL
+
+  rule ! B =&gt; notBool B
+  rule A &amp;&amp; B =&gt; A andBool B
+  rule A ^ B =&gt; A xorBool B
+  rule A || B =&gt; A orBool B
+endmodule
+</code></pre>
+<p>请注意syntax的封装:’ LESSON-06-C- syntax ‘模块只包含布尔表达式的syntax，而实现这些函数所需的任何其他语法都在’ LESSON-06-C ‘模块中。</p>
+<h4 id="课堂练习"><a href="#课堂练习" class="headerlink" title="课堂练习"></a>课堂练习</h4><p>向上面的布尔表达式计算器添加一个<code>implies</code>函数，使用’ -&gt; ‘符号来表示含义。你可以在<code>domains.md</code>的<code>BOOL </code>模块中查找K的内置<code>implies</code>函数。</p>
+<h2 id="K中的Integers"><a href="#K中的Integers" class="headerlink" title="K中的Integers"></a>K中的Integers</h2><p>不像大多数编程语言，最基本的整数类型是固定精度的整数类型，在K中最常用的 integer sort是<code>Int</code> sort，它表示<strong>数学</strong>意义上的整数，即任意精度的整数。</p>
+<p>在使用<code>Int</code> sort时，K提供了三个主要模块用于导入。第一个模块是<code>INT</code>模块，它包含所有整数的语法以及所有关于整数的函数。第二个模块是<code>INT-SYNTAX</code>，它只提供<strong>整数字面量</strong>本身的语法。然而，与K中的大多数内置sort不同，K也为<code>Int</code>sort提供了第三个模块:’ UNSIGNED-INT-SYNTAX ‘模块。此模块仅提供<strong>非负整数的</strong>syntax，即自然数。造成这种情况的原因包括词汇歧义。一般来说，在大多数编程语言中，’ -1 ‘不是一个字面量，而是一个应用一元<strong>否定运算符</strong>的字面量。因此，K提供了这个模块来简化指定此类语言的语法。</p>
+<p>有关<code>Int </code>sort中可用函数的详细信息，请参阅<code>domains.md </code>。请再次注意，我们如何在大多数整数操作的末尾附加<code> Int</code>，以确保它们不会与其他编程语言的语法发生冲突。</p>
+<h2 id="课外练习"><a href="#课外练习" class="headerlink" title="课外练习"></a>课外练习</h2><ol>
+<li>扩展第1.4课第2题的解决方案，实现定义加、减、乘和除行为的规则。让用户不要担心此时试图除以零的情况。使用<code>/Int</code>实现除法。通过执行作为第1.3课第2题一部分编写的算术表达式来测试新的计算器实现。检查以确保每个计算的值都是您期望的。</li>
+<li>将本课所学的布尔表达式计算器与问题1的解决方案结合起来，然后将组合计算器扩展为<code>&lt;</code>， <code>&lt;=</code>，<code> &gt;</code>，<code>&gt;=</code>，<code>==</code>和<code>!= </code>的表达式。编写一些布尔表达式，组合整数和布尔操作，并测试以确保这些表达式返回预期的真值。 </li>
+<li>用问题2的解计算以下表达式:<code>7 / 3 </code>，<code> 7 / -3</code>，<code>-7 / 3</code>，<code>-7 / -3</code>。然后将定义中的<code>/Int</code> 函数替换为<code>divInt</code> ，观察上面表达式的值是如何变化的。为什么会发生这种情况?</li>
+</ol>
+<h1 id="相关视频"><a href="#相关视频" class="headerlink" title="相关视频"></a>相关视频</h1><iframe src="//player.bilibili.com/player.html?aid=769538288&bvid=BV1Hr4y1x7Je&cid=734116011&page=1" scrolling="no" border="0" height="500" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>]]></content>
+      <categories>
+        <category>K框架编程入门</category>
+      </categories>
+  </entry>
+  <entry>
     <title>K框架第二步：K框架基础</title>
     <url>/2022/05/26/BasicProgramminginK-2/</url>
     <content><![CDATA[<p>这堂课将主要讲解K语言中的关于生产（productions）和规则的基础知识。</p>
@@ -259,76 +334,92 @@ endmodule
       </categories>
   </entry>
   <entry>
-    <title>K框架第六步：什么是内建的Integers 和 Booleans</title>
-    <url>/2022/05/30/BasicProgramminginK-6/</url>
-    <content><![CDATA[<p>本节课的目的是解释K中两种最基本的，自带的sort：<code>Int</code>sort和<code>Bool</code> sort，它们分别表示<strong>arbitrary-precision integers</strong>和<strong>Boolean algebra</strong>。</p>
-<h2 id="K中自带的sorts"><a href="#K中自带的sorts" class="headerlink" title="K中自带的sorts"></a>K中自带的sorts</h2><p>K在<a href="https://kframework.org/k-distribution/include/kframework/builtin/domains/">domains.md</a>中提供了一些有用sorts的说明，可以在K安装的<code>include/kframework/builtin</code>目录中找到这个文件。这个文件是通过<a href="https://en.wikipedia.org/wiki/Literate_programming">Literate programming</a>风格定义的，我们将在以后的课程中讨论。我们不会立即覆盖所有的sort，但是，这一课讨论了一些关于整数和布尔值的细节，并提供了如何在K的文档中查找更多关于内置函数的详细知识的信息。</p>
-<h2 id="K中的Booleans"><a href="#K中的Booleans" class="headerlink" title="K中的Booleans"></a>K中的Booleans</h2><p>K提供的最基本的内置sort是<code>Bool</code> sort，代表着布尔值(即<code>true</code>和<code>false</code>)。您已经看到了我们如何能够使用K的解析和消除歧义特性中，自己创建这个类型。然而，在绝大多数情况下，我们宁愿导入由K本身定义好的Boolean algebra。最简单的是，你可以通过在你的定义中导入模块<code>BOOL</code>来实现这一点。例如(“lesson-06-a.k”):</p>
-<pre><code class="k">module LESSON-06-A
+    <title>K框架第七步：条件边与规则优先级Integers 和 Booleans</title>
+    <url>/2022/06/01/BasicProgramminginK-7/</url>
+    <content><![CDATA[<p>这节课的目的是解释如何用K来编写条件规则，并解释如何控制规则尝试的顺序。</p>
+<h2 id="条件边（Side-Conditions）"><a href="#条件边（Side-Conditions）" class="headerlink" title="条件边（Side Conditions）"></a>条件边（Side Conditions）</h2><p>到目前为止，我们讨论的所有规则都是无条件的规则。如果规则的左边与函数的参数匹配，则应用该规则。然而，还有另一种类型的规则：条件规则。<strong>条件规则</strong>由一个<strong>规则体（rule body）</strong>和一个**条件边(side condition)**组成，其中rule body包含要匹配的模式，而side condition则有一个布尔表达式，该表达式的值必须为true，整个规则才能应用。</p>
+<p>K中的side condition是通过紧跟在规则主体之后的’ requires ‘关键字引入的。例如，下面是一个附带条件的规则(‘ lesson-07-a.k ‘):</p>
+<pre><code class="k">module LESSON-07-A
   imports BOOL
+  imports INT
 
-  syntax Fruit ::= Blueberry() | Banana()
-  syntax Bool ::= isBlue(Fruit) [function]
+  syntax Grade ::= &quot;letter-A&quot; 
+                 | &quot;letter-B&quot;
+                 | &quot;letter-C&quot;
+                 | &quot;letter-D&quot;
+                 | &quot;letter-F&quot;
+                 | gradeFromPercentile(Int) [function]
 
-  rule isBlue(Blueberry()) =&gt; true
-  rule isBlue(Banana()) =&gt; false
+  rule gradeFromPercentile(I) =&gt; letter-A requires I &gt;=Int 90
 endmodule
 </code></pre>
-<p>这里我们定义了一个简单的<strong>谓词（predicate）</strong>，即返回布尔值的函数。现在，我们可以对这些值执行通常的与、或、非等布尔运算。例如(“lesson-06-b.k”):“</p>
-<pre><code class="k">module LESSON-06-B
+<p>在这个例子中，<code>gradeFromPercentile</code>函数接受一个整数参数。如果传入的参数大于90，则该函数计算结果为<code>letter-A</code>。注意，允许条件边中引用出现在规则左边的变量。与出现在右边的变量一样，出现在左边条件中的变量计算出与左边匹配的值。然后对边条件中的函数求值，返回一个Sort <code>Bool</code>。如果术语等于<code>true</code>，那么规则就适用了。请记住，只有当规则左侧的模式与要计算的项匹配时，才会计算条件边。</p>
+<h3 id="课堂练习"><a href="#课堂练习" class="headerlink" title="课堂练习"></a>课堂练习</h3><p>编写一个规则，评估<code>gradeFromPercentile </code>函数的参数在[80,90]范围时，应得到’ letter-B ‘ 结果。编写程序，测试该函数是否正确地响应80到100之间的各种数字。  </p>
+<h2 id="owise-Rules"><a href="#owise-Rules" class="headerlink" title="owise Rules"></a><code>owise</code> Rules</h2><p>到目前为止，我们引入的所有规则都有相同的<strong>优先级</strong>。这意味着K并不需要强制规则被尝试的顺序。到目前为止，我们只讨论了K中的函数，所以我们不清楚为什么会做出这样的选择，如果一个函数的多个计算规则能够对不同的结果使用相同的参数来评估，那么它就没有被认为是定义良好的。然而，在接下来的课程中，我们将讨论K中的其他类型的规则，其中一些可能是<strong>不确定性</strong>。这意味着，如果有多个规则能够匹配，那么K将并行地探索这两个可能的规则，并在执行程序时考虑它们各自的结果。现在不要太担心这个，但只要理解，因为潜在的不确定性，我们不强制规则试图被应用的总体顺序。 </p>
+<p>然而，有时这并不实际;如果对某个函数没有适用的其他规则，那么表示该特定规则适用会非常方便。这可以通过在规则中添加<code>owise</code>属性来表达。在实践中，这意味着该规则的优先级低于其他规则，并且只会在尝试所有其他高优先级规则并失败后才会尝试应用该规则。</p>
+<p>例如，在上面的练习中，我们必须向处理<code>letter- b</code>分数的规则添加一个包含两个布尔比较的附加条件。然而，在实践中，这意味着我们将百分比与90进行两次比较。使用<code>owise</code>属性(<code>less- 07-b.k</code>)，我们可以更有效、更习惯地为<code>gradeFromPercentile</code>规则编写<code>letter-B</code>的情况:</p>
+<pre><code class="k">module LESSON-07-B
   imports BOOL
+  imports INT
 
-  syntax Fruit ::= Blueberry() | Banana()
-  syntax Bool ::= isBlue(Fruit) [function]
+  syntax Grade ::= &quot;letter-A&quot; 
+                 | &quot;letter-B&quot;
+                 | &quot;letter-C&quot;
+                 | &quot;letter-D&quot;
+                 | &quot;letter-F&quot;
+                 | gradeFromPercentile(Int) [function]
 
-  rule isBlue(Blueberry()) =&gt; true
-  rule isBlue(Banana()) =&gt; false
-
-  syntax Bool ::= isYellow(Fruit) [function]
-                | isBlueOrYellow(Fruit) [function]
-
-  rule isYellow(Banana()) =&gt; true
-  rule isYellow(Blueberry()) =&gt; false
-
-  rule isBlueOrYellow(F) =&gt; isBlue(F) orBool isYellow(F)
+  rule gradeFromPercentile(I) =&gt; letter-A requires I &gt;=Int 90
+  rule gradeFromPercentile(I) =&gt; letter-B requires I &gt;=Int 80 [owise]
 endmodule
 </code></pre>
-<p>在上面的例子中，包含布尔值<strong>或</strong>是通过<code>orBool </code>函数执行的，该函数在<code>BOOL</code>模块中定义。按照惯例，在K中，内置sort上的许多函数都以这些函数定义的<strong>主sort的名称作为后缀</strong>。这样，K的syntax (通常)就不会与任何其他编程语言的语法发生冲突。</p>
-<h3 id="课程练习"><a href="#课程练习" class="headerlink" title="课程练习"></a>课程练习</h3><p>编写一个函数<code>isBlueAndNotYellow</code>来计算适当的布尔表达式。如果您不确定要使用什么syntax，可以参考<a href="https://kframework.org/k-distribution/include/kframework/builtin/domains/">domains.md</a>中的’ BOOL ‘模块。添加一个sort为“Fruit”的术语，其中“isBlue”和“isYellow”都返回true，并测试“isblueandnotyellow”函数在所有三个“Fruit”上的行为是否符合预期。</p>
-<h3 id="Syntax-Modules"><a href="#Syntax-Modules" class="headerlink" title="Syntax Modules"></a>Syntax Modules</h3><p>对于在<code>domains.md</code>的大多数sorts， K定义了不少于1个模块，可以被用户导入。例如，对于<code>Bool</code> sort，K定义了前面已经讨论过的<code>BOOL</code> 模块，但也提供了<code>BOOL-SYNTAX</code>模块。与<code>BOOL</code>模块不同，该模块只声明值<code>true</code>和<code>false</code>，而不声明任何操作<code>Bool</code> sort的函数。基本原理是，在某些情况下，您可能希望将此模块导入到您定义的主syntax模块中，而您通常不希望对包含所有<code>Bool</code> sort函数的模块版本进行此操作。举个例子,如果你是定义的语义c++,你可能会<code>BOOL-SYNTAX</code> 导入的语法模块定义,因为<code>true</code>和<code>false</code>是c++的语法的一部分；但只会主要semantics模块中调用<code>BOOL</code>模块类似的函数，因为c++定义了它自己关于与、或、非运算的语法,它与<code>BOOL</code>模块中定义的语法不同。</p>
-<p>例如，下面是如何重新定义布尔表达式计算器，它使用了“Bool”sort，同时维护模块和导入的惯用结构，并首次包含自主定制<strong>计算表达式值</strong>的规则(‘ lesson-06-c.k ‘):</p>
-<pre><code class="k">module LESSON-06-C-SYNTAX
-  imports BOOL-SYNTAX
-
-  syntax Bool ::= &quot;(&quot; Bool &quot;)&quot; [bracket]
-                &gt; &quot;!&quot; Bool [function]
-                &gt; left:
-                  Bool &quot;&amp;&amp;&quot; Bool [function]
-                | Bool &quot;^&quot; Bool [function]
-                | Bool &quot;||&quot; Bool [function]
-endmodule
-
-module LESSON-06-C
-  imports LESSON-06-C-SYNTAX
+<p>这条规则是说，“如果其他所有规则都不适用，那么如果百分位数大于或等于80，那么分数是B。”注意，我们在同一个规则中同时使用了一个附加条件和一个<code>owise </code>属性。这不是必需的(稍后我们将看到)，但它是允许的。这意味着只有在其他规则不适用且左侧规则匹配的情况下才会尝试侧条件。您甚至可以在左边使用比简单的变量更复杂的匹配。更一般地，您还可以拥有多个高优先级规则，或多个<code>owise</code>规则。这在实践中意味着，所有非<code>non-owise</code>的规则都是先尝试的，顺序是任意的，然后是所有“明智”的规则，顺序是任意的。</p>
+<h3 id="课堂练习-1"><a href="#课堂练习-1" class="headerlink" title="课堂练习"></a>课堂练习</h3><p>等级“D”和“F”分别对应百分比范围[60,70)和[0,60)。编写’ gradeFromPercentile ‘的另一个实现，它只处理这些情况，并使用’ owise ‘属性来避免冗余的布尔值比较。编写测试程序，测试范围[0,70]中的各种百分比是否得到正确的评估。</p>
+<h2 id="规则优先级"><a href="#规则优先级" class="headerlink" title="规则优先级"></a>规则优先级</h2><p>碰巧的是，<code>owise</code>属性是一个更通用的概念的特定情况，我们称之为<strong>规则优先级</strong>。实际上，每个规则都被分配了一个整数优先级。规则按照优先级递增的顺序进行尝试，从优先级为0的规则开始，然后依次尝试每个递增的数值。 </p>
+<p>缺省情况下，规则优先级为50。如果规则具有<code>owise</code> 属性，它将被赋予200的优先级。你可以看到为什么这将导致在常规规则之后尝试<code>owise</code> 规则。</p>
+<p>然而，也可以通过<code>priority</code>属性直接为规则分配数值优先级。例如，我们可以在<code>gradeFromPercentile</code>函数(<code>lesson-07-c.k</code>)中使用另一种方式来表达这两个规则:</p>
+<pre><code class="k">module LESSON-07-C
   imports BOOL
+  imports INT
 
-  rule ! B =&gt; notBool B
-  rule A &amp;&amp; B =&gt; A andBool B
-  rule A ^ B =&gt; A xorBool B
-  rule A || B =&gt; A orBool B
+  syntax Grade ::= &quot;letter-A&quot; 
+                 | &quot;letter-B&quot;
+                 | &quot;letter-C&quot;
+                 | &quot;letter-D&quot;
+                 | &quot;letter-F&quot;
+                 | gradeFromPercentile(Int) [function]
+
+  rule gradeFromPercentile(I) =&gt; letter-A requires I &gt;=Int 90 [priority(50)]
+  rule gradeFromPercentile(I) =&gt; letter-B requires I &gt;=Int 80 [priority(200)]
 endmodule
 </code></pre>
-<p>请注意syntax的封装:’ LESSON-06-C- syntax ‘模块只包含布尔表达式的syntax，而实现这些函数所需的任何其他语法都在’ LESSON-06-C ‘模块中。</p>
-<h4 id="课堂练习"><a href="#课堂练习" class="headerlink" title="课堂练习"></a>课堂练习</h4><p>向上面的布尔表达式计算器添加一个<code>implies</code>函数，使用’ -&gt; ‘符号来表示含义。你可以在<code>domains.md</code>的<code>BOOL </code>模块中查找K的内置<code>implies</code>函数。</p>
-<h2 id="K中的Integers"><a href="#K中的Integers" class="headerlink" title="K中的Integers"></a>K中的Integers</h2><p>不像大多数编程语言，最基本的整数类型是固定精度的整数类型，在K中最常用的 integer sort是<code>Int</code> sort，它表示<strong>数学</strong>意义上的整数，即任意精度的整数。</p>
-<p>在使用<code>Int</code> sort时，K提供了三个主要模块用于导入。第一个模块是<code>INT</code>模块，它包含所有整数的语法以及所有关于整数的函数。第二个模块是<code>INT-SYNTAX</code>，它只提供<strong>整数字面量</strong>本身的语法。然而，与K中的大多数内置sort不同，K也为<code>Int</code>sort提供了第三个模块:’ UNSIGNED-INT-SYNTAX ‘模块。此模块仅提供<strong>非负整数的</strong>syntax，即自然数。造成这种情况的原因包括词汇歧义。一般来说，在大多数编程语言中，’ -1 ‘不是一个字面量，而是一个应用一元<strong>否定运算符</strong>的字面量。因此，K提供了这个模块来简化指定此类语言的语法。</p>
-<p>有关<code>Int </code>sort中可用函数的详细信息，请参阅<code>domains.md </code>。请再次注意，我们如何在大多数整数操作的末尾附加<code> Int</code>，以确保它们不会与其他编程语言的语法发生冲突。</p>
+<p>当然，我们可以指定一个优先级等于任何非负整数。例如，下面是一个处理剩余分数的更复杂的例子(<code>lesson-07-d.k</code>):</p>
+<pre><code class="k">module LESSON-07-D
+  imports BOOL
+  imports INT
+
+  syntax Grade ::= &quot;letter-A&quot; 
+                 | &quot;letter-B&quot;
+                 | &quot;letter-C&quot;
+                 | &quot;letter-D&quot;
+                 | &quot;letter-F&quot;
+                 | gradeFromPercentile(Int) [function]
+
+  rule gradeFromPercentile(I) =&gt; letter-A requires I &gt;=Int 90 [priority(50)]
+  rule gradeFromPercentile(I) =&gt; letter-B requires I &gt;=Int 80 [priority(51)]
+  rule gradeFromPercentile(I) =&gt; letter-C requires I &gt;=Int 70 [priority(52)]
+  rule gradeFromPercentile(I) =&gt; letter-D requires I &gt;=Int 60 [priority(53)]
+  rule gradeFromPercentile(_) =&gt; letter-F                     [priority(54)]
+endmodule
+</code></pre>
+<p>注意，我们在这里引入了一段新的语法:<code> _</code>。这实际上只是一个变量。然而，作为一种特殊情况，当一个变量名为<code>_</code>时，它不绑定一个可以在规则的右边或在附加条件中使用的值。实际上，<code>_ </code>是一个占位符变量，表示“我不关心这个术语”。</p>
+<p>在这个例子中，我们已经显式地表示了这个函数的规则被尝试的顺序。因为规则是按递增的数字优先级尝试的，所以我们首先尝试优先级为50的规则，然后是51，然后是52,53，最后是54。</p>
+<p>最后要注意的是，如果你给一个规则分配高于200的优先级，它将会在一个带有<code>owise</code>属性的规则之后被尝试，如果你给一个规则分配一个低于50的优先级，它将会在一个没有明确优先级的规则之前被尝试。</p>
 <h2 id="课外练习"><a href="#课外练习" class="headerlink" title="课外练习"></a>课外练习</h2><ol>
-<li>扩展第1.4课第2题的解决方案，实现定义加、减、乘和除行为的规则。让用户不要担心此时试图除以零的情况。使用<code>/Int</code>实现除法。通过执行作为第1.3课第2题一部分编写的算术表达式来测试新的计算器实现。检查以确保每个计算的值都是您期望的。</li>
-<li>将本课所学的布尔表达式计算器与问题1的解决方案结合起来，然后将组合计算器扩展为<code>&lt;</code>， <code>&lt;=</code>，<code> &gt;</code>，<code>&gt;=</code>，<code>==</code>和<code>!= </code>的表达式。编写一些布尔表达式，组合整数和布尔操作，并测试以确保这些表达式返回预期的真值。 </li>
-<li>用问题2的解计算以下表达式:<code>7 / 3 </code>，<code> 7 / -3</code>，<code>-7 / 3</code>，<code>-7 / -3</code>。然后将定义中的<code>/Int</code> 函数替换为<code>divInt</code> ，观察上面表达式的值是如何变化的。为什么会发生这种情况?</li>
+<li>写一个函数<code>isEven</code>，返回一个整数是否为偶数。使用两个规则和一个附加条件。规则的右边应该是布尔字面值。请参阅<a href="https://kframework.org/k-distribution/include/kframework/builtin/domains/">domains.md</a>以获得相关的整数操作。</li>
+<li>修改第1.6课第2题中的计算器应用程序，使除0不再使<code>krun</code>崩溃（产生“除0”异常提示）。相反，如果分母为零，<code>/ </code>函数不应该匹配它的任何规则。</li>
 </ol>
-<h1 id="相关视频"><a href="#相关视频" class="headerlink" title="相关视频"></a>相关视频</h1><iframe src="//player.bilibili.com/player.html?aid=769538288&bvid=BV1Hr4y1x7Je&cid=734116011&page=1" scrolling="no" border="0" height="500" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>]]></content>
+<h2 id="相关视频"><a href="#相关视频" class="headerlink" title="相关视频"></a>相关视频</h2><iframe src="//player.bilibili.com/player.html?aid=384595682&bvid=BV1nZ4y147oA&cid=735675352&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>]]></content>
       <categories>
         <category>K框架编程入门</category>
       </categories>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这节课的目的是解释如何用K来编写条件规则，并解释如何控制规则尝试的顺序。 条件边（Side Conditions）到目前为止，我们讨论的所有规则都是无条件的规则。如果规则的左边与函数的参数匹配，则应用该规则。然而，还有另一种类型的规则：条件规则。条件规则由一个规则体（rule body）和一个**条件边(side condition)**组成，其中rule body包含要匹配的模式，而side c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="K框架第七步：条件边与规则优先级Integers 和 Booleans">
+<meta property="og:url" content="http://example.com/2022/06/01/BasicProgramminginK-7/index.html">
+<meta property="og:site_name" content="区块链安全">
+<meta property="og:description" content="这节课的目的是解释如何用K来编写条件规则，并解释如何控制规则尝试的顺序。 条件边（Side Conditions）到目前为止，我们讨论的所有规则都是无条件的规则。如果规则的左边与函数的参数匹配，则应用该规则。然而，还有另一种类型的规则：条件规则。条件规则由一个规则体（rule body）和一个**条件边(side condition)**组成，其中rule body包含要匹配的模式，而side c">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-06-01T11:46:20.000Z">
+<meta property="article:modified_time" content="2022-06-01T11:49:58.327Z">
+<meta property="article:author" content="DongAoTony">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2022/06/01/BasicProgramminginK-7/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/06/01/BasicProgramminginK-7/","path":"2022/06/01/BasicProgramminginK-7/","title":"K框架第七步：条件边与规则优先级Integers 和 Booleans"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>K框架第七步：条件边与规则优先级Integers 和 Booleans | 区块链安全</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">区块链安全</p>
+      <i class="logo-line"></i>
+    </a>
+      <img class="custom-logo-image" src="/images/logo.png" alt="区块链安全">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-bs"><a href="/bs" rel="section"><i class="fa fa-th fa-fw"></i>区块链安全</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E8%BE%B9%EF%BC%88Side-Conditions%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">条件边（Side Conditions）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0"><span class="nav-number">1.1.</span> <span class="nav-text">课堂练习</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#owise-Rules"><span class="nav-number">2.</span> <span class="nav-text">owise Rules</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0-1"><span class="nav-number">2.1.</span> <span class="nav-text">课堂练习</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%84%E5%88%99%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-number">3.</span> <span class="nav-text">规则优先级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E5%A4%96%E7%BB%83%E4%B9%A0"><span class="nav-number">4.</span> <span class="nav-text">课外练习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E8%A7%86%E9%A2%91"><span class="nav-number">5.</span> <span class="nav-text">相关视频</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="DongAoTony"
+      src="/images/avatar.jpg#/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">DongAoTony</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/01/BasicProgramminginK-7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg#/images/avatar.gif">
+      <meta itemprop="name" content="DongAoTony">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="区块链安全">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="K框架第七步：条件边与规则优先级Integers 和 Booleans | 区块链安全">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          K框架第七步：条件边与规则优先级Integers 和 Booleans
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-06-01 19:46:20 / 修改时间：19:49:58" itemprop="dateCreated datePublished" datetime="2022-06-01T19:46:20+08:00">2022-06-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/K%E6%A1%86%E6%9E%B6%E7%BC%96%E7%A8%8B%E5%85%A5%E9%97%A8/" itemprop="url" rel="index"><span itemprop="name">K框架编程入门</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>这节课的目的是解释如何用K来编写条件规则，并解释如何控制规则尝试的顺序。</p>
+<h2 id="条件边（Side-Conditions）"><a href="#条件边（Side-Conditions）" class="headerlink" title="条件边（Side Conditions）"></a>条件边（Side Conditions）</h2><p>到目前为止，我们讨论的所有规则都是无条件的规则。如果规则的左边与函数的参数匹配，则应用该规则。然而，还有另一种类型的规则：条件规则。<strong>条件规则</strong>由一个<strong>规则体（rule body）</strong>和一个**条件边(side condition)**组成，其中rule body包含要匹配的模式，而side condition则有一个布尔表达式，该表达式的值必须为true，整个规则才能应用。</p>
+<p>K中的side condition是通过紧跟在规则主体之后的’ requires ‘关键字引入的。例如，下面是一个附带条件的规则(‘ lesson-07-a.k ‘):</p>
+<pre><code class="k">module LESSON-07-A
+  imports BOOL
+  imports INT
+
+  syntax Grade ::= &quot;letter-A&quot; 
+                 | &quot;letter-B&quot;
+                 | &quot;letter-C&quot;
+                 | &quot;letter-D&quot;
+                 | &quot;letter-F&quot;
+                 | gradeFromPercentile(Int) [function]
+
+  rule gradeFromPercentile(I) =&gt; letter-A requires I &gt;=Int 90
+endmodule
+</code></pre>
+<p>在这个例子中，<code>gradeFromPercentile</code>函数接受一个整数参数。如果传入的参数大于90，则该函数计算结果为<code>letter-A</code>。注意，允许条件边中引用出现在规则左边的变量。与出现在右边的变量一样，出现在左边条件中的变量计算出与左边匹配的值。然后对边条件中的函数求值，返回一个Sort <code>Bool</code>。如果术语等于<code>true</code>，那么规则就适用了。请记住，只有当规则左侧的模式与要计算的项匹配时，才会计算条件边。</p>
+<h3 id="课堂练习"><a href="#课堂练习" class="headerlink" title="课堂练习"></a>课堂练习</h3><p>编写一个规则，评估<code>gradeFromPercentile </code>函数的参数在[80,90]范围时，应得到’ letter-B ‘ 结果。编写程序，测试该函数是否正确地响应80到100之间的各种数字。  </p>
+<h2 id="owise-Rules"><a href="#owise-Rules" class="headerlink" title="owise Rules"></a><code>owise</code> Rules</h2><p>到目前为止，我们引入的所有规则都有相同的<strong>优先级</strong>。这意味着K并不需要强制规则被尝试的顺序。到目前为止，我们只讨论了K中的函数，所以我们不清楚为什么会做出这样的选择，如果一个函数的多个计算规则能够对不同的结果使用相同的参数来评估，那么它就没有被认为是定义良好的。然而，在接下来的课程中，我们将讨论K中的其他类型的规则，其中一些可能是<strong>不确定性</strong>。这意味着，如果有多个规则能够匹配，那么K将并行地探索这两个可能的规则，并在执行程序时考虑它们各自的结果。现在不要太担心这个，但只要理解，因为潜在的不确定性，我们不强制规则试图被应用的总体顺序。 </p>
+<p>然而，有时这并不实际;如果对某个函数没有适用的其他规则，那么表示该特定规则适用会非常方便。这可以通过在规则中添加<code>owise</code>属性来表达。在实践中，这意味着该规则的优先级低于其他规则，并且只会在尝试所有其他高优先级规则并失败后才会尝试应用该规则。</p>
+<p>例如，在上面的练习中，我们必须向处理<code>letter- b</code>分数的规则添加一个包含两个布尔比较的附加条件。然而，在实践中，这意味着我们将百分比与90进行两次比较。使用<code>owise</code>属性(<code>less- 07-b.k</code>)，我们可以更有效、更习惯地为<code>gradeFromPercentile</code>规则编写<code>letter-B</code>的情况:</p>
+<pre><code class="k">module LESSON-07-B
+  imports BOOL
+  imports INT
+
+  syntax Grade ::= &quot;letter-A&quot; 
+                 | &quot;letter-B&quot;
+                 | &quot;letter-C&quot;
+                 | &quot;letter-D&quot;
+                 | &quot;letter-F&quot;
+                 | gradeFromPercentile(Int) [function]
+
+  rule gradeFromPercentile(I) =&gt; letter-A requires I &gt;=Int 90
+  rule gradeFromPercentile(I) =&gt; letter-B requires I &gt;=Int 80 [owise]
+endmodule
+</code></pre>
+<p>这条规则是说，“如果其他所有规则都不适用，那么如果百分位数大于或等于80，那么分数是B。”注意，我们在同一个规则中同时使用了一个附加条件和一个<code>owise </code>属性。这不是必需的(稍后我们将看到)，但它是允许的。这意味着只有在其他规则不适用且左侧规则匹配的情况下才会尝试侧条件。您甚至可以在左边使用比简单的变量更复杂的匹配。更一般地，您还可以拥有多个高优先级规则，或多个<code>owise</code>规则。这在实践中意味着，所有非<code>non-owise</code>的规则都是先尝试的，顺序是任意的，然后是所有“明智”的规则，顺序是任意的。</p>
+<h3 id="课堂练习-1"><a href="#课堂练习-1" class="headerlink" title="课堂练习"></a>课堂练习</h3><p>等级“D”和“F”分别对应百分比范围[60,70)和[0,60)。编写’ gradeFromPercentile ‘的另一个实现，它只处理这些情况，并使用’ owise ‘属性来避免冗余的布尔值比较。编写测试程序，测试范围[0,70]中的各种百分比是否得到正确的评估。</p>
+<h2 id="规则优先级"><a href="#规则优先级" class="headerlink" title="规则优先级"></a>规则优先级</h2><p>碰巧的是，<code>owise</code>属性是一个更通用的概念的特定情况，我们称之为<strong>规则优先级</strong>。实际上，每个规则都被分配了一个整数优先级。规则按照优先级递增的顺序进行尝试，从优先级为0的规则开始，然后依次尝试每个递增的数值。 </p>
+<p>缺省情况下，规则优先级为50。如果规则具有<code>owise</code> 属性，它将被赋予200的优先级。你可以看到为什么这将导致在常规规则之后尝试<code>owise</code> 规则。</p>
+<p>然而，也可以通过<code>priority</code>属性直接为规则分配数值优先级。例如，我们可以在<code>gradeFromPercentile</code>函数(<code>lesson-07-c.k</code>)中使用另一种方式来表达这两个规则:</p>
+<pre><code class="k">module LESSON-07-C
+  imports BOOL
+  imports INT
+
+  syntax Grade ::= &quot;letter-A&quot; 
+                 | &quot;letter-B&quot;
+                 | &quot;letter-C&quot;
+                 | &quot;letter-D&quot;
+                 | &quot;letter-F&quot;
+                 | gradeFromPercentile(Int) [function]
+
+  rule gradeFromPercentile(I) =&gt; letter-A requires I &gt;=Int 90 [priority(50)]
+  rule gradeFromPercentile(I) =&gt; letter-B requires I &gt;=Int 80 [priority(200)]
+endmodule
+</code></pre>
+<p>当然，我们可以指定一个优先级等于任何非负整数。例如，下面是一个处理剩余分数的更复杂的例子(<code>lesson-07-d.k</code>):</p>
+<pre><code class="k">module LESSON-07-D
+  imports BOOL
+  imports INT
+
+  syntax Grade ::= &quot;letter-A&quot; 
+                 | &quot;letter-B&quot;
+                 | &quot;letter-C&quot;
+                 | &quot;letter-D&quot;
+                 | &quot;letter-F&quot;
+                 | gradeFromPercentile(Int) [function]
+
+  rule gradeFromPercentile(I) =&gt; letter-A requires I &gt;=Int 90 [priority(50)]
+  rule gradeFromPercentile(I) =&gt; letter-B requires I &gt;=Int 80 [priority(51)]
+  rule gradeFromPercentile(I) =&gt; letter-C requires I &gt;=Int 70 [priority(52)]
+  rule gradeFromPercentile(I) =&gt; letter-D requires I &gt;=Int 60 [priority(53)]
+  rule gradeFromPercentile(_) =&gt; letter-F                     [priority(54)]
+endmodule
+</code></pre>
+<p>注意，我们在这里引入了一段新的语法:<code> _</code>。这实际上只是一个变量。然而，作为一种特殊情况，当一个变量名为<code>_</code>时，它不绑定一个可以在规则的右边或在附加条件中使用的值。实际上，<code>_ </code>是一个占位符变量，表示“我不关心这个术语”。</p>
+<p>在这个例子中，我们已经显式地表示了这个函数的规则被尝试的顺序。因为规则是按递增的数字优先级尝试的，所以我们首先尝试优先级为50的规则，然后是51，然后是52,53，最后是54。</p>
+<p>最后要注意的是，如果你给一个规则分配高于200的优先级，它将会在一个带有<code>owise</code>属性的规则之后被尝试，如果你给一个规则分配一个低于50的优先级，它将会在一个没有明确优先级的规则之前被尝试。</p>
+<h2 id="课外练习"><a href="#课外练习" class="headerlink" title="课外练习"></a>课外练习</h2><ol>
+<li>写一个函数<code>isEven</code>，返回一个整数是否为偶数。使用两个规则和一个附加条件。规则的右边应该是布尔字面值。请参阅<a target="_blank" rel="noopener" href="https://kframework.org/k-distribution/include/kframework/builtin/domains/">domains.md</a>以获得相关的整数操作。</li>
+<li>修改第1.6课第2题中的计算器应用程序，使除0不再使<code>krun</code>崩溃（产生“除0”异常提示）。相反，如果分母为零，<code>/ </code>函数不应该匹配它的任何规则。</li>
+</ol>
+<h2 id="相关视频"><a href="#相关视频" class="headerlink" title="相关视频"></a>相关视频</h2><iframe src="//player.bilibili.com/player.html?aid=384595682&bvid=BV1nZ4y147oA&cid=735675352&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>DongAoTony
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2022/06/01/BasicProgramminginK-7/" title="K框架第七步：条件边与规则优先级Integers 和 Booleans">http://example.com/2022/06/01/BasicProgramminginK-7/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/05/30/BasicProgramminginK-6/" rel="prev" title="K框架第六步：什么是内建的Integers 和 Booleans">
+                  <i class="fa fa-chevron-left"></i> K框架第六步：什么是内建的Integers 和 Booleans
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DongAoTony</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

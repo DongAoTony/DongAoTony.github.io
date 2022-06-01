@@ -116,18 +116,6 @@ krun tests/diverse/factorial.simple
       </categories>
   </entry>
   <entry>
-    <title></title>
-    <url>/2022/05/22/%E5%8D%9A%E4%B8%BB%E5%AF%84%E8%AF%AD/</url>
-    <content><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>智能合约由于其去中心化的基本属性，以及自动执行的强制特性，让人们交流更加具有公信力，让世界间人为制造的壁垒逐渐被打破，让大家的生活变得更加方便。因此它的数量正在以指数级增长。</p>
-<p>但是，随着智能合约数量的增加，单个合约的体量与内在复杂度，也在急剧增加；同时，伴随着智能合约金融属性，让不良分子也盯上这块大的蛋糕；合约的设计或实现不合理，一旦被这些不法分子利用或用户的误操作，就会让我们遭受巨大损失。The DAO项目的辉煌与失败，就是很经典的例子。</p>
-<p>我们试图从网上寻找、也与行业精英聊过，发现关于智能合约安全与防护的相关知识存在着匮乏、零碎、不成体系等问题，远远难以满足当下智能合约安全保障的需求。因此，与几位共识的同仁商量，决定在Github上开辟一块专有的智能合约安全相关知识的学习园地。</p>
-<h1 id="欢迎您"><a href="#欢迎您" class="headerlink" title="欢迎您"></a>欢迎您</h1><p>我们将一直秉承该园地上的知识公开、免费，以提供给感兴趣的同仁一道学习。</p>
-<p>当然，我们也知道，这是一项不小的工作。所以期待更多的有共识的同仁一起加入！</p>
-<p>我们也有志基于此专题的学习，打造一个去中心的运作模式，对于有一定贡献量的作者，将视作核心团队成员。</p>
-<p>期待像我们一样的草莽，借此次去中心化的技术革命浪潮，打破人类已存在的诸多封闭性，成就别人，也成就你我！ 本专栏的知识产权，将归核心团队共同所有！</p>
-]]></content>
-  </entry>
-  <entry>
     <title>K框架第二步：K框架基础</title>
     <url>/2022/05/26/BasicProgramminginK-2/</url>
     <content><![CDATA[<p>这堂课将主要讲解K语言中的关于生产（productions）和规则的基础知识。</p>
@@ -269,5 +257,92 @@ endmodule
       <categories>
         <category>K框架编程入门</category>
       </categories>
+  </entry>
+  <entry>
+    <title>K框架第六步：什么是内建的Integers 和 Booleans</title>
+    <url>/2022/05/30/BasicProgramminginK-6/</url>
+    <content><![CDATA[<p>本节课的目的是解释K中两种最基本的，自带的sort：<code>Int</code>sort和<code>Bool</code> sort，它们分别表示<strong>arbitrary-precision integers</strong>和<strong>Boolean algebra</strong>。</p>
+<h2 id="K中自带的sorts"><a href="#K中自带的sorts" class="headerlink" title="K中自带的sorts"></a>K中自带的sorts</h2><p>K在<a href="https://kframework.org/k-distribution/include/kframework/builtin/domains/">domains.md</a>中提供了一些有用sorts的说明，可以在K安装的<code>include/kframework/builtin</code>目录中找到这个文件。这个文件是通过<a href="https://en.wikipedia.org/wiki/Literate_programming">Literate programming</a>风格定义的，我们将在以后的课程中讨论。我们不会立即覆盖所有的sort，但是，这一课讨论了一些关于整数和布尔值的细节，并提供了如何在K的文档中查找更多关于内置函数的详细知识的信息。</p>
+<h2 id="K中的Booleans"><a href="#K中的Booleans" class="headerlink" title="K中的Booleans"></a>K中的Booleans</h2><p>K提供的最基本的内置sort是<code>Bool</code> sort，代表着布尔值(即<code>true</code>和<code>false</code>)。您已经看到了我们如何能够使用K的解析和消除歧义特性中，自己创建这个类型。然而，在绝大多数情况下，我们宁愿导入由K本身定义好的Boolean algebra。最简单的是，你可以通过在你的定义中导入模块<code>BOOL</code>来实现这一点。例如(“lesson-06-a.k”):</p>
+<pre><code class="k">module LESSON-06-A
+  imports BOOL
+
+  syntax Fruit ::= Blueberry() | Banana()
+  syntax Bool ::= isBlue(Fruit) [function]
+
+  rule isBlue(Blueberry()) =&gt; true
+  rule isBlue(Banana()) =&gt; false
+endmodule
+</code></pre>
+<p>这里我们定义了一个简单的<strong>谓词（predicate）</strong>，即返回布尔值的函数。现在，我们可以对这些值执行通常的与、或、非等布尔运算。例如(“lesson-06-b.k”):“</p>
+<pre><code class="k">module LESSON-06-B
+  imports BOOL
+
+  syntax Fruit ::= Blueberry() | Banana()
+  syntax Bool ::= isBlue(Fruit) [function]
+
+  rule isBlue(Blueberry()) =&gt; true
+  rule isBlue(Banana()) =&gt; false
+
+  syntax Bool ::= isYellow(Fruit) [function]
+                | isBlueOrYellow(Fruit) [function]
+
+  rule isYellow(Banana()) =&gt; true
+  rule isYellow(Blueberry()) =&gt; false
+
+  rule isBlueOrYellow(F) =&gt; isBlue(F) orBool isYellow(F)
+endmodule
+</code></pre>
+<p>在上面的例子中，包含布尔值<strong>或</strong>是通过<code>orBool </code>函数执行的，该函数在<code>BOOL</code>模块中定义。按照惯例，在K中，内置sort上的许多函数都以这些函数定义的<strong>主sort的名称作为后缀</strong>。这样，K的syntax (通常)就不会与任何其他编程语言的语法发生冲突。</p>
+<h3 id="课程练习"><a href="#课程练习" class="headerlink" title="课程练习"></a>课程练习</h3><p>编写一个函数<code>isBlueAndNotYellow</code>来计算适当的布尔表达式。如果您不确定要使用什么syntax，可以参考<a href="https://kframework.org/k-distribution/include/kframework/builtin/domains/">domains.md</a>中的’ BOOL ‘模块。添加一个sort为“Fruit”的术语，其中“isBlue”和“isYellow”都返回true，并测试“isblueandnotyellow”函数在所有三个“Fruit”上的行为是否符合预期。</p>
+<h3 id="Syntax-Modules"><a href="#Syntax-Modules" class="headerlink" title="Syntax Modules"></a>Syntax Modules</h3><p>对于在<code>domains.md</code>的大多数sorts， K定义了不少于1个模块，可以被用户导入。例如，对于<code>Bool</code> sort，K定义了前面已经讨论过的<code>BOOL</code> 模块，但也提供了<code>BOOL-SYNTAX</code>模块。与<code>BOOL</code>模块不同，该模块只声明值<code>true</code>和<code>false</code>，而不声明任何操作<code>Bool</code> sort的函数。基本原理是，在某些情况下，您可能希望将此模块导入到您定义的主syntax模块中，而您通常不希望对包含所有<code>Bool</code> sort函数的模块版本进行此操作。举个例子,如果你是定义的语义c++,你可能会<code>BOOL-SYNTAX</code> 导入的语法模块定义,因为<code>true</code>和<code>false</code>是c++的语法的一部分；但只会主要semantics模块中调用<code>BOOL</code>模块类似的函数，因为c++定义了它自己关于与、或、非运算的语法,它与<code>BOOL</code>模块中定义的语法不同。</p>
+<p>例如，下面是如何重新定义布尔表达式计算器，它使用了“Bool”sort，同时维护模块和导入的惯用结构，并首次包含自主定制<strong>计算表达式值</strong>的规则(‘ lesson-06-c.k ‘):</p>
+<pre><code class="k">module LESSON-06-C-SYNTAX
+  imports BOOL-SYNTAX
+
+  syntax Bool ::= &quot;(&quot; Bool &quot;)&quot; [bracket]
+                &gt; &quot;!&quot; Bool [function]
+                &gt; left:
+                  Bool &quot;&amp;&amp;&quot; Bool [function]
+                | Bool &quot;^&quot; Bool [function]
+                | Bool &quot;||&quot; Bool [function]
+endmodule
+
+module LESSON-06-C
+  imports LESSON-06-C-SYNTAX
+  imports BOOL
+
+  rule ! B =&gt; notBool B
+  rule A &amp;&amp; B =&gt; A andBool B
+  rule A ^ B =&gt; A xorBool B
+  rule A || B =&gt; A orBool B
+endmodule
+</code></pre>
+<p>请注意syntax的封装:’ LESSON-06-C- syntax ‘模块只包含布尔表达式的syntax，而实现这些函数所需的任何其他语法都在’ LESSON-06-C ‘模块中。</p>
+<h4 id="课堂练习"><a href="#课堂练习" class="headerlink" title="课堂练习"></a>课堂练习</h4><p>向上面的布尔表达式计算器添加一个<code>implies</code>函数，使用’ -&gt; ‘符号来表示含义。你可以在<code>domains.md</code>的<code>BOOL </code>模块中查找K的内置<code>implies</code>函数。</p>
+<h2 id="K中的Integers"><a href="#K中的Integers" class="headerlink" title="K中的Integers"></a>K中的Integers</h2><p>不像大多数编程语言，最基本的整数类型是固定精度的整数类型，在K中最常用的 integer sort是<code>Int</code> sort，它表示<strong>数学</strong>意义上的整数，即任意精度的整数。</p>
+<p>在使用<code>Int</code> sort时，K提供了三个主要模块用于导入。第一个模块是<code>INT</code>模块，它包含所有整数的语法以及所有关于整数的函数。第二个模块是<code>INT-SYNTAX</code>，它只提供<strong>整数字面量</strong>本身的语法。然而，与K中的大多数内置sort不同，K也为<code>Int</code>sort提供了第三个模块:’ UNSIGNED-INT-SYNTAX ‘模块。此模块仅提供<strong>非负整数的</strong>syntax，即自然数。造成这种情况的原因包括词汇歧义。一般来说，在大多数编程语言中，’ -1 ‘不是一个字面量，而是一个应用一元<strong>否定运算符</strong>的字面量。因此，K提供了这个模块来简化指定此类语言的语法。</p>
+<p>有关<code>Int </code>sort中可用函数的详细信息，请参阅<code>domains.md </code>。请再次注意，我们如何在大多数整数操作的末尾附加<code> Int</code>，以确保它们不会与其他编程语言的语法发生冲突。</p>
+<h2 id="课外练习"><a href="#课外练习" class="headerlink" title="课外练习"></a>课外练习</h2><ol>
+<li>扩展第1.4课第2题的解决方案，实现定义加、减、乘和除行为的规则。让用户不要担心此时试图除以零的情况。使用<code>/Int</code>实现除法。通过执行作为第1.3课第2题一部分编写的算术表达式来测试新的计算器实现。检查以确保每个计算的值都是您期望的。</li>
+<li>将本课所学的布尔表达式计算器与问题1的解决方案结合起来，然后将组合计算器扩展为<code>&lt;</code>， <code>&lt;=</code>，<code> &gt;</code>，<code>&gt;=</code>，<code>==</code>和<code>!= </code>的表达式。编写一些布尔表达式，组合整数和布尔操作，并测试以确保这些表达式返回预期的真值。 </li>
+<li>用问题2的解计算以下表达式:<code>7 / 3 </code>，<code> 7 / -3</code>，<code>-7 / 3</code>，<code>-7 / -3</code>。然后将定义中的<code>/Int</code> 函数替换为<code>divInt</code> ，观察上面表达式的值是如何变化的。为什么会发生这种情况?</li>
+</ol>
+<h1 id="相关视频"><a href="#相关视频" class="headerlink" title="相关视频"></a>相关视频</h1><iframe src="//player.bilibili.com/player.html?aid=769538288&bvid=BV1Hr4y1x7Je&cid=734116011&page=1" scrolling="no" border="0" height="500" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>]]></content>
+      <categories>
+        <category>K框架编程入门</category>
+      </categories>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2022/05/22/%E5%8D%9A%E4%B8%BB%E5%AF%84%E8%AF%AD/</url>
+    <content><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>智能合约由于其去中心化的基本属性，以及自动执行的强制特性，让人们交流更加具有公信力，让世界间人为制造的壁垒逐渐被打破，让大家的生活变得更加方便。因此它的数量正在以指数级增长。</p>
+<p>但是，随着智能合约数量的增加，单个合约的体量与内在复杂度，也在急剧增加；同时，伴随着智能合约金融属性，让不良分子也盯上这块大的蛋糕；合约的设计或实现不合理，一旦被这些不法分子利用或用户的误操作，就会让我们遭受巨大损失。The DAO项目的辉煌与失败，就是很经典的例子。</p>
+<p>我们试图从网上寻找、也与行业精英聊过，发现关于智能合约安全与防护的相关知识存在着匮乏、零碎、不成体系等问题，远远难以满足当下智能合约安全保障的需求。因此，与几位共识的同仁商量，决定在Github上开辟一块专有的智能合约安全相关知识的学习园地。</p>
+<h1 id="欢迎您"><a href="#欢迎您" class="headerlink" title="欢迎您"></a>欢迎您</h1><p>我们将一直秉承该园地上的知识公开、免费，以提供给感兴趣的同仁一道学习。</p>
+<p>当然，我们也知道，这是一项不小的工作。所以期待更多的有共识的同仁一起加入！</p>
+<p>我们也有志基于此专题的学习，打造一个去中心的运作模式，对于有一定贡献量的作者，将视作核心团队成员。</p>
+<p>期待像我们一样的草莽，借此次去中心化的技术革命浪潮，打破人类已存在的诸多封闭性，成就别人，也成就你我！ 本专栏的知识产权，将归核心团队共同所有！</p>
+]]></content>
   </entry>
 </search>
